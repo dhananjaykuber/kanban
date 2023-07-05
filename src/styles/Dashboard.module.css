@@ -404,6 +404,10 @@
     gap: 7px;
   }
 
+  .dashboard .head .right .profile {
+    gap: 5px;
+  }
+
   .dashboard .head .right .icons img {
     width: 22px;
   }
