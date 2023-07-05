@@ -218,6 +218,7 @@
   padding: 20px;
   border-radius: 16px;
   cursor: grab;
+  height: 100%;
 }
 
 .dashboard .content .step .stepHeader {
