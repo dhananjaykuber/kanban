@@ -1,9 +1,153 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import styles from '../styles/Dashboard.module.css';
 import SidebarContext from '../context/SidebarContext';
+import Step from './dashboard/Step';
+import { DragDropContext } from 'react-beautiful-dnd';
 
 const Dashboard = () => {
   const { showSidebar, setShowSidebar } = useContext(SidebarContext);
+
+  const [todo, setTodo] = useState([
+    {
+      id: 1,
+      title: 'Brainstorming',
+      body: 'Brainstorming brings team members diverse experience into play.',
+      priority: 'low',
+      comments: '12',
+      files: '0',
+      assigne: [
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+      ],
+    },
+    {
+      id: 2,
+      title: 'Research',
+      body: 'User research helps you to create an optimal products for users.',
+      priority: 'high',
+      comments: '10',
+      files: '3',
+      assigne: [
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+      ],
+    },
+    {
+      id: 3,
+      title: 'Wireframe',
+      body: 'Low fidelity wireframes include the most basic content and visuals.',
+      priority: 'high',
+      comments: '8',
+      files: '4',
+      assigne: [
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+      ],
+    },
+  ]);
+  const [onProgress, setOnProgress] = useState([
+    {
+      id: 4,
+      title: 'Onbording Illustration',
+      image: 'images/dashboard/image1-step.svg',
+      priority: 'low',
+      comments: '14',
+      files: '5',
+      assigne: [
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+      ],
+    },
+    {
+      id: 5,
+      title: 'Moodboard',
+      image: '/images/dashboard/image2-step.svg',
+      priority: 'low',
+      comments: '9',
+      files: '10',
+      assigne: [
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+      ],
+    },
+  ]);
+  const [done, setDone] = useState([
+    {
+      id: 6,
+      title: 'Mobile App Design',
+      image: '/images/dashboard/image3-step.svg',
+      priority: 'completed',
+      comments: '12',
+      files: '15',
+      assigne: [
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+      ],
+    },
+    {
+      id: 7,
+      title: 'Design System',
+      body: 'It just needs to adapt the UI from what you did before.',
+      priority: 'completed',
+      comments: '12',
+      files: '15',
+      assigne: [
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+        '/images/profiles/profile1.svg',
+      ],
+    },
+  ]);
+
+  const onDragEnd = (result) => {
+    // console.log(result);
+
+    const { source, destination } = result;
+
+    if (!destination) {
+      return;
+    }
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+
+    let todos = todo,
+      onProgressTodo = onProgress,
+      doneTodo = done;
+
+    let selectedTodo;
+
+    if (source.droppableId === 'todo') {
+      selectedTodo = todos[source.index];
+      todos.splice(source.index, 1);
+    } else if (source.droppableId === 'onProgress') {
+      selectedTodo = onProgressTodo[source.index];
+      onProgressTodo.splice(source.index, 1);
+    } else {
+      selectedTodo = doneTodo[source.index];
+      doneTodo.splice(source.index, 1);
+    }
+
+    if (destination.droppableId === 'todo') {
+      todos.splice(destination.index, 0, selectedTodo);
+    } else if (destination.droppableId === 'onProgress') {
+      onProgressTodo.splice(destination.index, 0, selectedTodo);
+    } else {
+      doneTodo.splice(destination.index, 0, selectedTodo);
+    }
+
+    setTodo(todos);
+    setOnProgress(onProgressTodo);
+    setDone(doneTodo);
+  };
 
   return (
     <div className={styles.dashboard}>
@@ -119,253 +263,31 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className={styles.content}>
-        <div className={styles.step}>
-          <div className={styles.stepHeader}>
-            <div className={styles.stepHeaderLeft}>
-              <div></div>
-              <p>To Do</p>
-              <span>3</span>
-            </div>
-            <img src="/images/dashboard/add-square-step.svg" alt="add-square" />
-          </div>
-
-          {/* card */}
-          <div className={styles.stepCard}>
-            <div className={styles.cardHeader}>
-              <span>Low</span>
-              <img src="/images/sidebar/three-dot.svg" alt="three-dot" />
-            </div>
-            <div className={styles.cardContent}>
-              <h1>Brainstroming</h1>
-              <p>
-                Brainstorming brings team members' diverse experience into play.{' '}
-              </p>
-            </div>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardProfiles}>
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-              </div>
-              <div className={styles.cardFooterInfo}>
-                <div>
-                  <img src="/images/dashboard/message-step.svg" alt="message" />
-                  <span>12 comments</span>
-                </div>
-                <div>
-                  <img src="/images/dashboard/folder-step.svg" alt="folder" />
-                  <span>0 files</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/*  */}
-          {/* card */}
-          <div className={styles.stepCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.high}>High</span>
-              <img src="/images/sidebar/three-dot.svg" alt="three-dot" />
-            </div>
-            <div className={styles.cardContent}>
-              <h1>Research</h1>
-              <p>
-                User research helps you to create an optimal product for users.
-              </p>
-            </div>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardProfiles}>
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-              </div>
-              <div className={styles.cardFooterInfo}>
-                <div>
-                  <img src="/images/dashboard/message-step.svg" alt="message" />
-                  <span>12 comments</span>
-                </div>
-                <div>
-                  <img src="/images/dashboard/folder-step.svg" alt="folder" />
-                  <span>0 files</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/*  */}
-          {/* card */}
-          <div className={styles.stepCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.high}>High</span>
-              <img src="/images/sidebar/three-dot.svg" alt="three-dot" />
-            </div>
-            <div className={styles.cardContent}>
-              <h1>Wireframes</h1>
-              <p>
-                Low fidelity wireframes include the most basic content and
-                visuals.
-              </p>
-            </div>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardProfiles}>
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-              </div>
-              <div className={styles.cardFooterInfo}>
-                <div>
-                  <img src="/images/dashboard/message-step.svg" alt="message" />
-                  <span>12 comments</span>
-                </div>
-                <div>
-                  <img src="/images/dashboard/folder-step.svg" alt="folder" />
-                  <span>0 files</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/*  */}
+      <DragDropContext onDragEnd={onDragEnd}>
+        <div className={styles.content}>
+          <Step
+            title="To Do"
+            color="#5030e5"
+            data={todo}
+            setData={setTodo}
+            droppableId="todo"
+          />
+          <Step
+            title="On Progress"
+            color="#FFA500"
+            data={onProgress}
+            setData={setOnProgress}
+            droppableId="onProgress"
+          />
+          <Step
+            title="Done"
+            color="#76A5EA"
+            data={done}
+            setData={setDone}
+            droppableId="done"
+          />
         </div>
-
-        <div className={styles.step}>
-          <div className={styles.stepHeader} style={{ borderColor: '#FFA500' }}>
-            <div className={styles.stepHeaderLeft}>
-              <div style={{ background: '#FFA500' }}></div>
-              <p>On Progress</p>
-              <span>3</span>
-            </div>
-          </div>
-
-          {/* Card */}
-          <div className={styles.stepCard}>
-            <div className={styles.cardHeader}>
-              <span>Low</span>
-              <img src="/images/sidebar/three-dot.svg" alt="three-dot" />
-            </div>
-            <div className={styles.cardContent}>
-              <h1>Onboarding Illustrations</h1>
-              <img src="/images/dashboard/image1-step.svg" alt="image" />
-            </div>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardProfiles}>
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-              </div>
-              <div className={styles.cardFooterInfo}>
-                <div>
-                  <img src="/images/dashboard/message-step.svg" alt="message" />
-                  <span>12 comments</span>
-                </div>
-                <div>
-                  <img src="/images/dashboard/folder-step.svg" alt="folder" />
-                  <span>0 files</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/*  */}
-
-          {/* Card */}
-          <div className={styles.stepCard}>
-            <div className={styles.cardHeader}>
-              <span>Low</span>
-              <img src="/images/sidebar/three-dot.svg" alt="three-dot" />
-            </div>
-            <div className={styles.cardContent}>
-              <h1>Moodboard</h1>
-              <img src="/images/dashboard/image2-step.svg" alt="image" />
-            </div>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardProfiles}>
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-              </div>
-              <div className={styles.cardFooterInfo}>
-                <div>
-                  <img src="/images/dashboard/message-step.svg" alt="message" />
-                  <span>12 comments</span>
-                </div>
-                <div>
-                  <img src="/images/dashboard/folder-step.svg" alt="folder" />
-                  <span>0 files</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/*  */}
-        </div>
-
-        <div className={styles.step}>
-          <div className={styles.stepHeader} style={{ borderColor: '#8BC48A' }}>
-            <div className={styles.stepHeaderLeft}>
-              <div style={{ background: '#76A5EA' }}></div>
-              <p>Done</p>
-              <span>3</span>
-            </div>
-          </div>
-
-          {/* Card */}
-          <div className={styles.stepCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.completed}>Completed</span>
-              <img src="/images/sidebar/three-dot.svg" alt="three-dot" />
-            </div>
-            <div className={styles.cardContent}>
-              <h1>Mobile App Design</h1>
-              <img src="/images/dashboard/image3-step.svg" alt="image" />
-            </div>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardProfiles}>
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-              </div>
-              <div className={styles.cardFooterInfo}>
-                <div>
-                  <img src="/images/dashboard/message-step.svg" alt="message" />
-                  <span>12 comments</span>
-                </div>
-                <div>
-                  <img src="/images/dashboard/folder-step.svg" alt="folder" />
-                  <span>0 files</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/*  */}
-
-          {/* card */}
-          <div className={styles.stepCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.completed}>Completed</span>
-              <img src="/images/sidebar/three-dot.svg" alt="three-dot" />
-            </div>
-            <div className={styles.cardContent}>
-              <h1>Design System</h1>
-              <p>It just needs to adapt the UI from what you did before</p>
-            </div>
-            <div className={styles.cardFooter}>
-              <div className={styles.cardProfiles}>
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-                <img src="/images/dashboard/profile.svg" alt="profile" />
-              </div>
-              <div className={styles.cardFooterInfo}>
-                <div>
-                  <img src="/images/dashboard/message-step.svg" alt="message" />
-                  <span>12 comments</span>
-                </div>
-                <div>
-                  <img src="/images/dashboard/folder-step.svg" alt="folder" />
-                  <span>0 files</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          {/*  */}
-        </div>
-      </div>
+      </DragDropContext>
     </div>
   );
 };

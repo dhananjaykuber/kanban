@@ -280,6 +280,7 @@
   font-weight: 500;
   padding: 4px 12px;
   border-radius: 4px;
+  text-transform: capitalize;
 }
 
 .dashboard .content .step .stepCard .cardHeader .completed {

@@ -9,7 +9,7 @@ function App() {
 
   return (
     <SidebarContext.Provider value={{ showSidebar, setShowSidebar }}>
-      <div className={styles.container}>
+      <div className={styles.board}>
         <Sidebar />
         <Dashboard />
       </div>
