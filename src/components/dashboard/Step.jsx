@@ -16,7 +16,7 @@ const Step = ({ title, color, data, setData, droppableId }) => {
             <div className={styles.stepHeaderLeft}>
               <div style={{ background: color }}></div>
               <p>{title}</p>
-              <span>3</span>
+              <span>{data?.length}</span>
             </div>
             <img src="/images/dashboard/add-square-step.svg" alt="add-square" />
           </div>
